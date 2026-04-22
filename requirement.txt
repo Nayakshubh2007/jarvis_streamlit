@@ -1,5 +1,3 @@
 streamlit
-sounddevice
-vosk
 pyttsx3
 wikipedia
