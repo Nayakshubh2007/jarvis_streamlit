@@ -1,62 +1,40 @@
-user_input = ""
-command = ""
-print("App started...")
-
 import streamlit as st
-from jarvis import process_command, speak, listen
+import datetime
+import wikipedia
 
-st.set_page_config(page_title="Jarvis AI")
-st.markdown(
-    """
-    <style>
-    .stApp {
-        background: linear-gradient(to right, #4facfe, #00f2fe);
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+st.title("Jarvis AI Assistant")
 
+def process_command(command):
+    command = command.lower()
 
-st.title("🤖 NARROW AI (an assistent you can always belive)")
+    if "time" in command:
+        return datetime.datetime.now().strftime("The time is %H:%M")
 
-option = st.radio("Choose Input Method:", ["Text", "Voice"])
+    elif "youtube" in command:
+        return "Open: https://youtube.com"
 
-# -------- TEXT MODE --------
-if option == "Text":
-    user_input = st.text_input("Enter your command:")
+    elif "google" in command:
+        return "Open: https://google.com"
 
-if user_input:
-    response = process_command(user_input)
+    elif "who is" in command:
+        person = command.replace("who is", "")
+        try:
+            return wikipedia.summary(person, sentences=2)
+        except:
+            return "Not found"
 
-    if response == "exit":
-        st.warning("Shutting down narrow...")
+    elif "what is" in command:
+        thing = command.replace("what is", "")
+        try:
+            return wikipedia.summary(thing, sentences=2)
+        except:
+            return "Not found"
+
     else:
-        st.success(response)
-        speak(response)       
-# -------- VOICE MODE --------
-elif option == "Voice":
-    if st.button("Start Listening"):
-        st.info(" Listening... Speak clearly")
+        return "I didn't understand that"
 
-        command = listen()
+command = st.text_input("Enter your command")
 
 if command:
-    st.write(f"You said: {command}")
     response = process_command(command)
-
-    if response == "exit":
-        st.warning("Shutting down Narrow...")
-    else:
-        st.success(response)
-        speak(response)
-else:
-    st.error("Could not understand. Try again.")
-
-with st.expander("show running instructions"):
-    st.markdown("""
-1. Select voice or text  
-2. Type/Speak your command 
-3. wait for response                 
-4. Narrow will give answer
-""")
+    st.write(response)
