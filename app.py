@@ -2,7 +2,7 @@ import streamlit as st
 import datetime
 import wikipedia
 
-st.title("Jarvis AI Assistant")
+st.title("Narrow AI Assistant")
 
 def process_command(command):
     command = command.lower()
